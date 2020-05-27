@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Сергей Евгеньевич](https://up.htmlacademy.ru/javascript/20/user/1072207).
-* Наставник: `Неизвестно`.
+* Студент: [Sergey Pashin](https://up.htmlacademy.ru/javascript/20/user/1072207).
+* Наставник: [Александр Уразаев] (https://htmlacademy.ru/profile/urazaev).
 
 ---
 

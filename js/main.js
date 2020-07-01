@@ -42,7 +42,7 @@ addAttributeDisabled(liveMapFilterElements);
 // Координаты центра метки:
 mapPinMain.style.top = (mapPinMain.offsetTop - mapPinMain.offsetHeight / 2) + 'px';/* Смещение вверх на половину высоты элемента */
 mapPinMain.style.left = (mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + 'px';/* Смещение влево на половину ширины элемента */
-
+console.log(mapPinMain.offsetTop);
 // АКТИВНОЕ СОСТОЯНИЕ
 
 var mapPinMainActions = function () {
@@ -126,9 +126,11 @@ var mapPinMainActions = function () {
   /* Отрисовка в активном состоянии */
   addPinAllCards(saveAllCards);
 
+  // Корректировка расположения точки в активном состоянии.
+  /* // Координаты центра для иглы метки: map__pin--main */
+  var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки */
+  mapPinMain.style.top = mapPinMain.offsetTop - (mapPinMain.offsetHeight / 2 + MAP_PIN_MAIN_AFTER_TIP) + 'px';/* Вычитание из расстояния сверху до метки половины высоты(оставшейся половины высоты метки) и высоты дополнительного визуального элемента ножки/острия выполненного псевдоэлементом.  */
 };
-
-// console.log(mapPinMainActions);
 
 mapPinMain.addEventListener('mousedown', function (evt) { /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
   if (evt.which === 1) {
@@ -142,33 +144,13 @@ mapPinMain.addEventListener('keydown', function (evt) { /* Добавлен сл
   }
 });
 
+
+// console.log(mapPinMainActions);
 // console.log('Вывод в консоль нажатия');
-
-
-// Перенести в обработчик!!!
-// Корректировка расположения точки в активном состоянии.
-// Координаты центра метки:
-
-console.log(mapPinMain.offsetTop);
-console.log(mapPinMain.offsetLeft);
 // console.log(mapPinMain.style.top);
-// console.log(mapPinMain.style.left);
-
-// console.log(mapPinMain.offsetHeight);
-// console.log(mapPinMain.offsetWidth);
-
-
-
-
 // console.log(mapPinMain.offsetTop);
+// console.log(mapPinMain.style.left);
 // console.log(mapPinMain.offsetLeft);
-
 // console.log(mapPinMain.offsetHeight);
 // console.log(mapPinMain.offsetWidth);
-
-
-
-
-
-
 

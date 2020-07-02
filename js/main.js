@@ -42,7 +42,6 @@ addAttributeDisabled(liveMapFilterElements);
 // Координаты центра метки:
 mapPinMain.style.top = (mapPinMain.offsetTop - mapPinMain.offsetHeight / 2) + 'px';/* Смещение вверх на половину высоты элемента */
 mapPinMain.style.left = (mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + 'px';/* Смещение влево на половину ширины элемента */
-console.log(mapPinMain.offsetTop);
 // АКТИВНОЕ СОСТОЯНИЕ
 
 var mapPinMainActions = function () {
@@ -132,17 +131,31 @@ var mapPinMainActions = function () {
   mapPinMain.style.top = mapPinMain.offsetTop - (mapPinMain.offsetHeight / 2 + MAP_PIN_MAIN_AFTER_TIP) + 'px';/* Вычитание из расстояния сверху до метки половины высоты(оставшейся половины высоты метки) и высоты дополнительного визуального элемента ножки/острия выполненного псевдоэлементом.  */
 };
 
-mapPinMain.addEventListener('mousedown', function (evt) { /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
+
+var addConditionForMousedownMapPinMain = function (evt) {
   if (evt.which === 1) {
     mapPinMainActions();
   }
-});
+  mapPinMain.removeEventListener('mousedown', addConditionForMousedownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
+  mapPinMain.removeEventListener('keydown', addConditionForKeydownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
+};
+mapPinMain.addEventListener('mousedown', addConditionForMousedownMapPinMain); /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
 
-mapPinMain.addEventListener('keydown', function (evt) { /* Добавлен слушатель/обработчик на событие keydown Enter */
+
+var addConditionForKeydownMapPinMain = function (evt) {
   if (evt.key === 'Enter') {
     mapPinMainActions();
   }
-});
+  mapPinMain.removeEventListener('keydown', addConditionForKeydownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
+  mapPinMain.removeEventListener('mousedown', addConditionForMousedownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
+};
+mapPinMain.addEventListener('keydown', addConditionForKeydownMapPinMain);/* Добавлен слушатель/обработчик на событие keydown Enter */
+
+
+
+
+
+
 
 
 // console.log(mapPinMainActions);
@@ -150,7 +163,7 @@ mapPinMain.addEventListener('keydown', function (evt) { /* Добавлен сл
 // console.log(mapPinMain.style.top);
 // console.log(mapPinMain.offsetTop);
 // console.log(mapPinMain.style.left);
-// console.log(mapPinMain.offsetLeft);
+console.log(mapPinMain.offsetLeft);
 // console.log(mapPinMain.offsetHeight);
 // console.log(mapPinMain.offsetWidth);
 

@@ -19,6 +19,8 @@ var WIDTH_AVATAR = 50;
 var HEIGHT_AVATAR = 70;
 var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
+var mapPinMainAddress = document.querySelector('#address');
+var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки */
 
 // НЕАКТИВНОЕ СОСТОЯНИЕ:
 
@@ -39,9 +41,9 @@ addAttributeDisabled(liveAdFormElements);
 addAttributeDisabled(liveMapFilterElements);
 
 // Корректировка расположения точки в неактивном состоянии.
-// Координаты центра метки:
-mapPinMain.style.top = (mapPinMain.offsetTop - mapPinMain.offsetHeight / 2) + 'px';/* Смещение вверх на половину высоты элемента */
-mapPinMain.style.left = (mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + 'px';/* Смещение влево на половину ширины элемента */
+// // Координаты центра метки:
+mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop - mapPinMain.offsetHeight / 2);
+
 // АКТИВНОЕ СОСТОЯНИЕ
 
 var mapPinMainActions = function () {
@@ -127,11 +129,8 @@ var mapPinMainActions = function () {
 
   // Корректировка расположения точки в активном состоянии.
   /* // Координаты центра для иглы метки: map__pin--main */
-  var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки */
-  mapPinMain.style.top = mapPinMain.offsetTop - (mapPinMain.offsetHeight / 2 + MAP_PIN_MAIN_AFTER_TIP) + 'px';/* Вычитание из расстояния сверху до метки половины высоты(оставшейся половины высоты метки) и высоты дополнительного визуального элемента ножки/острия выполненного псевдоэлементом.  */
+  mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop - (mapPinMain.offsetHeight / 2 + MAP_PIN_MAIN_AFTER_TIP));/* Вычитание из расстояния сверху до метки половины высоты(оставшейся половины высоты метки) и высоты дополнительного визуального элемента ножки/острия выполненного псевдоэлементом.  */
 };
-
-// onMainPinMouseDown
 
 var onMainPinMouseDown = function (evt) {
   if (evt.which === 1) {
@@ -202,39 +201,39 @@ roomNumbers.addEventListener('change', function () {
 
 
 
-var capacityGuests = document.getElementById('capacity');
-capacityGuests.addEventListener('change', function () {
-  if (capacityGuests.value == 0) {
-    console.log('Не для гостей');
-    document.getElementById('room_number_1').disabled = 'disabled';
-    document.getElementById('room_number_2').disabled = 'disabled';
-    document.getElementById('room_number_3').disabled = 'disabled';
-    document.getElementById('room_number_100').disabled = false;
+// var capacityGuests = document.getElementById('capacity');
+// capacityGuests.addEventListener('change', function () {
+//   if (capacityGuests.value == 0) {
+//     console.log('Не для гостей');
+//     document.getElementById('room_number_1').disabled = 'disabled';
+//     document.getElementById('room_number_2').disabled = 'disabled';
+//     document.getElementById('room_number_3').disabled = 'disabled';
+//     document.getElementById('room_number_100').disabled = false;
 
-  }
-  if (capacityGuests.value == 1) {
-    console.log('Комнат 1.2.3.');
-    document.getElementById('room_number_1').disabled = false;
-    document.getElementById('room_number_2').disabled = false;
-    document.getElementById('room_number_3').disabled = false;
-    document.getElementById('room_number_100').disabled = 'disabled';
-  }
-  if (capacityGuests.value == 2) {
-    console.log('Комнат 2.3.');
-    document.getElementById('room_number_1').disabled = 'disabled';
-    document.getElementById('room_number_2').disabled = false;
-    document.getElementById('room_number_3').disabled = false;
-    document.getElementById('room_number_100').disabled = 'disabled';
-  }
-  if (capacityGuests.value == 3) {
-    console.log('Комнат 3');
-    document.getElementById('room_number_1').disabled = 'disabled';
-    document.getElementById('room_number_2').disabled = 'disabled';
-    document.getElementById('room_number_3').disabled = false;
-    document.getElementById('room_number_100').disabled = 'disabled';
-  }
-  // console.log(capacityGuests.value);
-});
+//   }
+//   if (capacityGuests.value == 1) {
+//     console.log('Комнат 1.2.3.');
+//     document.getElementById('room_number_1').disabled = false;
+//     document.getElementById('room_number_2').disabled = false;
+//     document.getElementById('room_number_3').disabled = false;
+//     document.getElementById('room_number_100').disabled = 'disabled';
+//   }
+//   if (capacityGuests.value == 2) {
+//     console.log('Комнат 2.3.');
+//     document.getElementById('room_number_1').disabled = 'disabled';
+//     document.getElementById('room_number_2').disabled = false;
+//     document.getElementById('room_number_3').disabled = false;
+//     document.getElementById('room_number_100').disabled = 'disabled';
+//   }
+//   if (capacityGuests.value == 3) {
+//     console.log('Комнат 3');
+//     document.getElementById('room_number_1').disabled = 'disabled';
+//     document.getElementById('room_number_2').disabled = 'disabled';
+//     document.getElementById('room_number_3').disabled = false;
+//     document.getElementById('room_number_100').disabled = 'disabled';
+//   }
+//   // console.log(capacityGuests.value);
+// });
 // console.log(capacityGuests.selectedIndex);
 // console.log(capacityGuests.value);
 
@@ -250,7 +249,7 @@ capacityGuests.addEventListener('change', function () {
 
 
 // Пока пусть работает страница постоянно.
-mapPinMainActions();
+// mapPinMainActions();
 // console.log(mapPinMainActions);
 // console.log('Вывод в консоль нажатия');
 // console.log(mapPinMain.style.top);

@@ -21,7 +21,7 @@ var map = document.querySelector('.map');
 var mapPinMain = document.querySelector('.map__pin--main');
 var mapPinMainAddress = document.querySelector('#address');
 var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки */
-
+var roomNumbers = document.getElementById('room_number');/* Поле выбора количества комнат. */
 // НЕАКТИВНОЕ СОСТОЯНИЕ:
 
 var adForm = document.querySelector('.ad-form'); /* Находится форма для отправки из разметки */
@@ -43,6 +43,36 @@ addAttributeDisabled(liveMapFilterElements);
 // Корректировка расположения точки в неактивном состоянии.
 // // Координаты центра метки:
 mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop - mapPinMain.offsetHeight / 2);
+
+// Количество возможных гостей в зависимости от количество арендуемых комнат.
+var onRoomNumbersCheck = function () {
+  if (roomNumbers.value == 100) {
+    document.getElementById('capacity_1').disabled = 'disabled';
+    document.getElementById('capacity_2').disabled = 'disabled';
+    document.getElementById('capacity_3').disabled = 'disabled';
+    document.getElementById('capacity_0').disabled = false;
+
+  }
+  if (roomNumbers.value == 1) {
+    document.getElementById('capacity_1').disabled = false;
+    document.getElementById('capacity_2').disabled = 'disabled';
+    document.getElementById('capacity_3').disabled = 'disabled';
+    document.getElementById('capacity_0').disabled = 'disabled';
+  }
+  if (roomNumbers.value == 2) {
+    document.getElementById('capacity_1').disabled = false;
+    document.getElementById('capacity_2').disabled = false;
+    document.getElementById('capacity_3').disabled = 'disabled';
+    document.getElementById('capacity_0').disabled = 'disabled';
+  }
+  if (roomNumbers.value == 3) {
+    document.getElementById('capacity_1').disabled = false;
+    document.getElementById('capacity_2').disabled = false;
+    document.getElementById('capacity_3').disabled = false;
+    document.getElementById('capacity_0').disabled = 'disabled';
+  }
+};
+
 
 // АКТИВНОЕ СОСТОЯНИЕ
 
@@ -130,137 +160,28 @@ var mapPinMainActions = function () {
   // Корректировка расположения точки в активном состоянии.
   /* // Координаты центра для иглы метки: map__pin--main */
   mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft - mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop - (mapPinMain.offsetHeight / 2 + MAP_PIN_MAIN_AFTER_TIP));/* Вычитание из расстояния сверху до метки половины высоты(оставшейся половины высоты метки) и высоты дополнительного визуального элемента ножки/острия выполненного псевдоэлементом.  */
+
+  onRoomNumbersCheck();/* Проверка соответствия выбранного количества комнат - гостям. */
 };
 
-var onMainPinMouseDown = function (evt) {
-  if (evt.which === 1) {
+var onMainPinMouseOrKeyDown = function (evt) { /* Функция которая(Запустит действия при активации страницы) будет передана в слушатель */
+  if (evt.which === 1 || evt.key === 'Enter') {
     mapPinMainActions();
+    mapPinMain.removeEventListener('mousedown', onMainPinMouseOrKeyDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
+    mapPinMain.removeEventListener('keydown', onMainPinMouseOrKeyDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
   }
-  mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
-  mapPinMain.removeEventListener('keydown', addConditionForKeydownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
+
+  roomNumbers.addEventListener('change', onRoomNumbersCheck);/* Слушатель выбора количества комнат который подскажет для какого количества гостей они предназначены. */
 };
-mapPinMain.addEventListener('mousedown', onMainPinMouseDown); /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
-
-
-var addConditionForKeydownMapPinMain = function (evt) {
-  if (evt.key === 'Enter') {
-    mapPinMainActions();
-  }
-  mapPinMain.removeEventListener('keydown', addConditionForKeydownMapPinMain);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
-  mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
-};
-mapPinMain.addEventListener('keydown', addConditionForKeydownMapPinMain);/* Добавлен слушатель/обработчик на событие keydown Enter */
-
-
-// Количество гостей.
-/* <select id="room_number" name="rooms">
-  <option value="1" selected="">1 комната</option>
-  <option value="2">2 комнаты</option>
-  <option value="3">3 комнаты</option>
-  <option value="100">100 комнат</option>
-</select> */
-
-/*
-  <select id="capacity" name="capacity">
-  <option id="capacity_3" value="3" >для 3 гостей</option>
-  <option id="capacity_2" value="2">для 2 гостей</option>
-  <option id="capacity_1" value="1" selected>для 1 гостя</option>
-  <option id="capacity_0" value="0">не для гостей</option>
-</select>
- */
-
-var roomNumbers = document.getElementById('room_number');
-roomNumbers.addEventListener('change', function () {
-  if (roomNumbers.value == 100) {
-    document.getElementById('capacity_1').disabled = 'disabled';
-    document.getElementById('capacity_2').disabled = 'disabled';
-    document.getElementById('capacity_3').disabled = 'disabled';
-    document.getElementById('capacity_0').disabled = false;
-
-  }
-  if (roomNumbers.value == 1) {
-    document.getElementById('capacity_1').disabled = false;
-    document.getElementById('capacity_2').disabled = false;
-    document.getElementById('capacity_3').disabled = false;
-    document.getElementById('capacity_0').disabled = 'disabled';
-  }
-  if (roomNumbers.value == 2) {
-    document.getElementById('capacity_1').disabled = 'disabled';
-    document.getElementById('capacity_2').disabled = false;
-    document.getElementById('capacity_3').disabled = false;
-    document.getElementById('capacity_0').disabled = 'disabled';
-  }
-  if (roomNumbers.value == 3) {
-    document.getElementById('capacity_1').disabled = 'disabled';
-    document.getElementById('capacity_2').disabled = 'disabled';
-    document.getElementById('capacity_3').disabled = false;
-    document.getElementById('capacity_0').disabled = 'disabled';
-  }
-  console.log(roomNumbers.value);
-});
-
-
-
-// var capacityGuests = document.getElementById('capacity');
-// capacityGuests.addEventListener('change', function () {
-//   if (capacityGuests.value == 0) {
-//     console.log('Не для гостей');
-//     document.getElementById('room_number_1').disabled = 'disabled';
-//     document.getElementById('room_number_2').disabled = 'disabled';
-//     document.getElementById('room_number_3').disabled = 'disabled';
-//     document.getElementById('room_number_100').disabled = false;
-
-//   }
-//   if (capacityGuests.value == 1) {
-//     console.log('Комнат 1.2.3.');
-//     document.getElementById('room_number_1').disabled = false;
-//     document.getElementById('room_number_2').disabled = false;
-//     document.getElementById('room_number_3').disabled = false;
-//     document.getElementById('room_number_100').disabled = 'disabled';
-//   }
-//   if (capacityGuests.value == 2) {
-//     console.log('Комнат 2.3.');
-//     document.getElementById('room_number_1').disabled = 'disabled';
-//     document.getElementById('room_number_2').disabled = false;
-//     document.getElementById('room_number_3').disabled = false;
-//     document.getElementById('room_number_100').disabled = 'disabled';
-//   }
-//   if (capacityGuests.value == 3) {
-//     console.log('Комнат 3');
-//     document.getElementById('room_number_1').disabled = 'disabled';
-//     document.getElementById('room_number_2').disabled = 'disabled';
-//     document.getElementById('room_number_3').disabled = false;
-//     document.getElementById('room_number_100').disabled = 'disabled';
-//   }
-//   // console.log(capacityGuests.value);
-// });
-// console.log(capacityGuests.selectedIndex);
-// console.log(capacityGuests.value);
-
-
-// console.log(capacityGuests);
-// 1 комната — «для 1 гостя»;
-
-// 2 комнаты — «для 2 гостей» или «для 1 гостя»;
-
-// 3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»;
-
-// 100 комнат — «не для гостей».
-
+mapPinMain.addEventListener('mousedown', onMainPinMouseOrKeyDown); /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
+mapPinMain.addEventListener('keydown', onMainPinMouseOrKeyDown);/* Добавлен слушатель/обработчик на событие keydown Enter */
 
 // Пока пусть работает страница постоянно.
 // mapPinMainActions();
-// console.log(mapPinMainActions);
+
 // console.log('Вывод в консоль нажатия');
-// console.log(mapPinMain.style.top);
-// console.log(mapPinMain.offsetTop);
-// console.log(mapPinMain.style.left);
-// console.log(mapPinMain.offsetLeft);
-// console.log(mapPinMain.offsetHeight);
-// console.log(mapPinMain.offsetWidth);
 // console.log(capacityGuests.selectedIndex);
 // var capacityGuests = document.getElementById('capacity');
 // var capacityGuests = document.getElementById('capacity');
 // var liveCapacity = document.getElementById('capacity').children;
-// console.log(liveCapacity);
 

@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var adForm = document.querySelector('.ad-form'); /* Находится форма для отправки из разметки */
-  var liveAdFormElements = document.querySelector('.ad-form').children; /* Внутри находится коллекция дочерних элементов */
+  var liveElements = document.querySelector('.ad-form').children; /* Внутри находится коллекция дочерних элементов */
   var liveMapFilterElements = document.querySelector('.map__filters').children; /* Внутри находится коллекция дочерних элементов */
   adForm.classList.add('ad-form--disabled');
 
@@ -11,12 +11,11 @@
     }
     return liveCollection;
   };
-  addAttributeDisabled(liveAdFormElements);
+  addAttributeDisabled(liveElements);
   addAttributeDisabled(liveMapFilterElements);
 
   window.form = {
-    adForm: adForm,
-    liveAdFormElements: liveAdFormElements,
+    liveElements: liveElements,
     liveMapFilterElements: liveMapFilterElements,
   };
 })();

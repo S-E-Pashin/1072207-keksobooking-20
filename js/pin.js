@@ -1,19 +1,17 @@
 'use strict';
-// Переношу все что относится к pin(Главному) из map
-// Пин Начало----------------
 (function () {
-  // из map
+  var adForm = document.querySelector('.ad-form'); /* Находится форма для отправки из разметки */
   var WIDTH_AVATAR = 50;
   var HEIGHT_AVATAR = 70;
-  // --
+
+  var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main'); /* Главный пин на карте */
   var mapPinMainAddress = document.querySelector('#address'); /* Адрес(Поле) куда передаются данные о нахождении главного пина(Координаты) */
   var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки(Пина) */
   // Корректировка расположения точки пина в неактивном состоянии.
   // // Координаты центра метки:
   mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
-  // Пин конец -------------------
-  // из map
+
   var renderPinCloneTemplateElements = function (item) { /* Отрисовщик данных на карте */
     var pinCloneTemplate = templatePin.cloneNode(true);/* Создаем переменную в которую записываем/копируем/клонируем элемент/переменную/Шаблон(вернее шаблон, просто задан переменной.) template со всем ее содержимым(Т.е. всю ее разметку вместе с детьми/если бы были.(true), если дети узла должны быть клонированы или false для того, чтобы был клонирован только указанный узел.) */
     var pinCloneTemplateImage = pinCloneTemplate.querySelector('img');
@@ -26,10 +24,9 @@
 
     return pinCloneTemplate;
   };
-  // из map
-  var saveAllCards = window.map.createAllCards(); /* Переменная которая хранит массив с объектами.Запускаем выполнение функции по формированию массива с объектами. */
 
-  // из map
+  var saveAllCards = window.data.createAllCards(); /* Переменная которая хранит массив с объектами.Запускаем выполнение функции по формированию массива с объектами. */
+
   var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');/* ДОБАВЛЕНИЕ ЧЕРЕЗ template// Создана переменная template(одноименна с названием элемента template) которая ищет элемент/шаблон template по id, после обращается к свойству данного элемента content(которое является единственным свойством данного элемента и предназначено для взаимодействия с его содержимым.) */
 
   var mapPins = document.querySelector('.map__pins');/* Переменная для нахождения блока с классом map__pins. (в последующем будет использоваться для добавления элементов в разметку посредством documentFragment)Это блок для отрисовки. */
@@ -42,14 +39,13 @@
     mapPins.appendChild(fragment); /* Добавляем элемент|Фрагмент который представляет из себя элемент pin с всей разметкой и указанными нами свойствами в элемент с классом mapPins(внутрь данного элемента/вернее его клона) в конец. Это выполняется для т.н. накопления всех элементов этого блока для их совместной, последующей, единоразовой, последовательной отрисовки посредством использования fragment. */
   };
 
-  // из map
   var mapPinMainActions = function () { /* Главная функция активация карты(Нажатием на pin)*/
-    window.form.adForm.classList.remove('ad-form--disabled');
+    adForm.classList.remove('ad-form--disabled');
 
-    window.map.removeAttributeDisabled(window.form.liveAdFormElements);
+    window.map.removeAttributeDisabled(window.form.liveElements);
     window.map.removeAttributeDisabled(window.form.liveMapFilterElements);
 
-    window.map.map.classList.remove('map--faded');/* Удален класс map--faded из элемента с классом map */ /* Удаляется согласно 4 заданию */
+    map.classList.remove('map--faded');/* Удален класс map--faded из элемента с классом map */ /* Удаляется согласно 4 заданию */
 
     /* Отрисовка в активном состоянии */
     addPinAllCards(saveAllCards);
@@ -67,20 +63,12 @@
     if (evt.which === 1 || evt.key === 'Enter') {
       mapPinMainActions();
       mapPinMain.removeEventListener('mousedown', onMainPinMouseOrKeyDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) mousedown */
-      mapPinMain.removeEventListener('keydown', onMainPinMouseOrKeyDown);/* // Удаление слушателя(Убрать эффект постоянного прибавления) Enter*/
     }
     window.validation.roomNumbers.addEventListener('change', window.validation.onRoomNumbersCheck);/* Слушатель выбора количества комнат который подскажет для какого количества гостей они предназначены. */
   };
+
+  mapPinMain.addEventListener('mousedown', onMainPinMouseOrKeyDown); /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
+
   window.pin = {
-    mapPinMain: mapPinMain,
-    mapPinMainAddress: mapPinMainAddress,
-    MAP_PIN_MAIN_AFTER_TIP: MAP_PIN_MAIN_AFTER_TIP,
-    renderPinCloneTemplateElements: renderPinCloneTemplateElements,
-    templatePin: templatePin,
-    mapPins: mapPins,
-    fragment: fragment,
-    addPinAllCards: addPinAllCards,
-    mapPinMainActions: mapPinMainActions,
-    onMainPinMouseOrKeyDown: onMainPinMouseOrKeyDown
   };
 })();

@@ -25,7 +25,7 @@
     return pinCloneTemplate;
   };
 
-  var saveAllCards = window.data.createAllCards(); /* Переменная которая хранит массив с объектами.Запускаем выполнение функции по формированию массива с объектами. */
+  // var saveAllCards = window.data.createAllCards(); /* Переменная которая хранит массив с объектами.Запускаем выполнение функции по формированию массива с объектами. */
   // console.log(window.data.createAllCards());
   // console.log(window.xhr.response);
   var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');/* ДОБАВЛЕНИЕ ЧЕРЕЗ template// Создана переменная template(одноименна с названием элемента template) которая ищет элемент/шаблон template по id, после обращается к свойству данного элемента content(которое является единственным свойством данного элемента и предназначено для взаимодействия с его содержимым.) */
@@ -49,7 +49,20 @@
     map.classList.remove('map--faded');/* Удален класс map--faded из элемента с классом map */ /* Удаляется согласно 4 заданию */
 
     /* Отрисовка в активном состоянии */
-    addPinAllCards(saveAllCards);
+
+    var onDataLoad = function (data) {
+      addPinAllCards(data); /* addPinAllCards(saveAllCards);было. Теперь  */
+      // console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
+    };
+
+    var onError = function () {
+      console.log('Ошибка');
+    };
+
+
+    window.backend.load(onDataLoad, onError);
+
+    // #############################kl;adsflo;adsml;adjsfl;adfsl;adfsqlal;adfsrj
 
     // Корректировка расположения точки в активном состоянии.
     /* // Координаты центра для иглы метки: map__pin--main */

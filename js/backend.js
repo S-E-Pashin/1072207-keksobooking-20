@@ -2,82 +2,45 @@
 'use strict';
 
 (function () {
-  var xhr = new XMLHttpRequest(); /* Свойство XMLHttpRequest.readyState возвращает текущее состояние объекта XMLHttpRequest. Объект XHR может иметь следующие состояния:  */
-  xhr.responseType = 'json'; /* Преобразую за счет встроенных возможностей браузера текст в строку что бы не выполнять данные трансформации в ручную посредством - console.log(JSON.parse(xhr.responseText)); /* Отобразит полученные данные от сервера строкой но посредством JSON.parse преобразует полученную строку в данные.  */
-  xhr.open('GET', 'https://javascript.pages.academy/keksobooking/data'); /* Как и куда хочу обратиться(Адрес от куда получить данные.) Взято из 5.1 ТЗ Верно ???*/
-  xhr.send(); /* Запуск отправки запроса на сервер. Получены данные которые содержатся в response и responseText */
-  // console.log(xhr.response);
-  var body = function () {
-    xhr.addEventListener('load', function (/* evt */) { /* Прослушиватель события загрузки xhr */
-      // console.log(xhr.response);
-      var bodyResponse = xhr.response;
-      // console.log(body);
-      // try {
-      //   console.log(evt.target === xhr);
-      //   console.log(xhr.response); /* Отображаю полученные данные(В виде данных т.к. использовано браузерное преобразование строки - xhr.responseType = 'json';) */
-      //   console.log(onSuccess(xhr.response) + 'dsdsds');
-      // } catch (err) {
-      //   console.error(err.message);
-      // }
-      // console.log(bodyResponse);
-      return bodyResponse;
+
+  var URL = 'https://javascript.pages.academy/keksobooking/data'; /* Адрес по которому будет направляться запрос open.  */
+  var LOAD_METHOD = 'GET'; /* Метод которым должен быть получен ответ от сервера(Тип предоставления) */
+  var STATUS_OK = 200;
+  var TIMEOUT_IN_MS = 1000;
+
+  var load = function (onSuccess, onError) { /* Функция которая будет вызвана в другом файле а ее параметры это в будущем функции которые примут в себя заданные здесь параметры и сработают с ними в том файле в котором будет вызвана данная функция через глобольный экспорт/импорт */
+    console.log("Загрузка работает");
+    var xhr = new XMLHttpRequest(); /* Свойство XMLHttpRequest.readyState возвращает текущее состояние объекта XMLHttpRequest. Объект XHR может иметь следующие состояния:  */
+    xhr.responseType = 'json'; /* Преобразую за счет встроенных возможностей браузера текст строку в данные что бы не выполнять трансформации в ручную посредством - console.log(JSON.parse(xhr.responseText)); /* Отобразит полученные данные от сервера строкой но посредством JSON.parse преобразует полученную строку в данные.  */
+
+    console.log(xhr.response);
+    xhr.addEventListener('load', function () { /* Прослушиватель события загрузки xhr */
+      if (xhr.status === STATUS_OK) { /* Условие для соблюдения которого изменения произошедшие в xhr должны соответствовать выполненным без ошибок что соответствует xhr.status 200 */
+        onSuccess(xhr.response); /* В случае успешного выполнения загрузки функция получаемая из параметра будет выполнена с параметром который будет содержать в себе данные из xhr.response */
+        console.log("Слушатель на загрузку сработал");
+      } else {
+        onError('Статус ответа' + xhr.status + xhr.statusText); /* статус ответа + строка статуса ответа. */
+        console.log("Ошибки нет");
+      }
+
+      // События, ошибки:
+      xhr.addEventListener('error', function () {
+        onError('Произошла ошибка соединения');
+        console.log("Еррор");
+      });
+
+      xhr.addEventListener('timeout', function () {
+        onError('Критичесское время выполнения запроса сервера ' + xhr.timeout + 'мс' + ' пожалуйста, повторите операцию.');
+        console.log("Таймер");
+      });
     });
-    return;
+
+    xhr.timeout = TIMEOUT_IN_MS;
+    xhr.open(LOAD_METHOD, URL); /* Как и куда хочу обратиться(Адрес от куда получить данные.) Подготовка к запросу.*/
+    xhr.send(); /* Запуск отправки запроса на сервер. Получены данные которые содержатся в response и responseText */
   };
-  console.log(body());
-  // var onError = function (message) { /* // Функция ошибки */ /* Не понимаю как это связано. */
-  //   console.error(message);
-  // };
-  // console.log(xhr.response);
-  // var onSuccess = function (data) {
-  //   var CHTO = data;
-  //   console.log(CHTO);
-  // }
 
-  // // console.log(xhr.readyState + ' - Изначальное состояние запроса'); /* 0 - Объект был создан. Метод open() ещё не вызывался. */
-  // console.log(xhr);
-
-  // console.log(xhr.response);
-
-  // // console.log('Состояние xhr после отправки запроса на сервер:');
-  // // console.log(xhr);
-  // // console.log('Состояние xhr после функции прослушивателя на загрузке:');
-  // // console.log(xhr);
-  // // console.log(xhr.readyState + ' readyState - Состояние запроса после слушателя на загрузку:');
-
-  // // console.log(xhr.responseText + 'Проверка.');
-  // console.log(xhr.response);
-
-  // Код из демонстрации. Весь кроме адреса.
-  // var URL = 'https://javascript.pages.academy/keksobooking/data';
-  // var StatusCode = {
-  //   OK: 200
-  // };
-  // var TIMEOUT_IN_MS = 10000;
-
-  // window.load = function (onSuccess, onError) {
-  //   var xhr = new XMLHttpRequest();
-  //   xhr.responseType = 'json';
-
-  //   xhr.addEventListener('load', function () {
-  //     if (xhr.status === StatusCode.OK) {
-  // onSuccess(xhr.response);
-  // console.log(onSuccess(xhr.response) + 'dsdsds');
-  //     } else {
-  //       onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
-  //     }
-  //   });
-  //   xhr.addEventListener('error', function () {
-  //     onError('Произошла ошибка соединения');
-  //   });
-  //   xhr.addEventListener('timeout', function () {
-  //     onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
-  //   });
-
-  //   xhr.timeout = TIMEOUT_IN_MS;
-
-  //   xhr.open('GET', URL);
-  //   xhr.send();
-  // };
-
+  window.backend = {/* Экспорт данных в область общей видимости. */
+    load: load
+  };
 })();

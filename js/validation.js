@@ -7,12 +7,12 @@
 
   var roomPrice = document.querySelector('#price');
   var roomType = document.querySelector('#type');
-  var roomTypeValue = roomType.value;
+  // var roomTypeValue = roomType.value;
   var minPriceRoom = {
-    'bungalo' : '0',
-    'flat' : '1000',
-    'house' : '5000',
-    'palace' : '10000'
+    'bungalo': '0',
+    'flat': '1000',
+    'house': '5000',
+    'palace': '10000'
   };
 
   var onRoomNumbersCheck = function () { /* Функция проверки валидности заполнения полей комнат и количества гостей. */
@@ -35,59 +35,19 @@
 
 
   var onRoomPriceCheck = function () {
-    // if () else {};
-    // console.log(minPrice + ' Стартовое значение для минимальной цены');
-    // var minPrice;
-    // switch (roomTypeValue) {
-    //   case 'bungalo' :
-    //     minPrice = '0';
-    //     console.log(minPrice + ' Значение минимальной цены для Бунгало');
-    //     break;
-    //   case 'flat':
-    //     minPrice = 1000;
-    //     console.log(minPrice + ' Значение минимальной цены для квартиры');
-    //     break;
-    //   case 'house':
-    //     minPrice = 5000;
-    //     break;
-    //     case 'palace':
-    //   minPrice = 10000;
-    //     break;
-    //   default :
-    //   console.log(roomType.value);
-    //   console.log('Подходящее значение не получено');
-    // }
-    // return minPrice;
-    // console.log(roomTypeValue);
-    // console.log(document.querySelector('#type').value);
-    // console.log(minPriceRoom[roomTypeValue]);
-    // console.log(minPriceRoom[document.querySelector('#type').value]);
-    // roomPrice.placeholder = 999;
     // roomPrice.min = minPriceRoom[document.querySelector('#type').value];
     // roomPrice.placeholder = minPriceRoom[document.querySelector('#type').value];
-
-    roomPrice.placeholder = roomPrice.min = minPriceRoom[document.querySelector('#type').value];
-
-    if (minPriceRoom[document.querySelector('#type').value] < minPriceRoom[document.querySelector('#type').value]) {
-      console.log('Подходящее значение не получено');
-      roomNumbers.setCustomValidity('Некорректное значение');
-        guestsNumber.style.backgroundColor = 'pink'; /* Подсвет розовым неверного ответа */
-        roomNumbers.style.backgroundColor = 'pink'; /* Подсвет розовым неверного ответа */
-
-    }
+    roomPrice.placeholder = roomPrice.min = minPriceRoom[document.querySelector('#type').value]; /* Значения будут равны значению которое соответствует ключу в объекте который находится в minPriceRoom  */
     // roomType.removeEventListener('change', onRoomPriceCheck);/* // Удаление слушателя Пока не нужно возможно если страница будет как то деактевироваться в процессе взаимодействия с ней без перезагрузки.*/
-    // Нужно после взаимодействия с полем price и если стоимость ниже чем
   };
 
-  // Вынести в Пин активацию.#####
-  roomType.addEventListener('change', onRoomPriceCheck);
-  roomPrice.addEventListener('change', console.log(roomPrice.value));
 
   // ############################
   window.validation = {
     onRoomNumbersCheck: onRoomNumbersCheck,
     guestsNumber: guestsNumber,
     roomNumbers: roomNumbers,
-    onRoomPriceCheck: onRoomPriceCheck
+    onRoomPriceCheck: onRoomPriceCheck,
+    roomType: roomType,
   };
 })();

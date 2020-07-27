@@ -8,12 +8,12 @@
   var mapPinMain = document.querySelector('.map__pin--main'); /* Главный пин на карте */
   var mapPinMainAddress = document.querySelector('#address'); /* Адрес(Поле) куда передаются данные о нахождении главного пина(Координаты) */
   var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки(Пина) */
-  var NUMBER_CARDS_DISPLAY = 5;
   // Корректировка расположения точки пина в неактивном состоянии.
   // // Координаты центра метки:
   mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
 
-  var renderPinCloneTemplateElements = function (item) { /* Отрисовщик данных на карте */
+  // ############# РЕНДЕР --- ВОЗМОЖНО ЭТОТ КОД БУДЕТ ПЕРЕНЕСЕН ##########################
+  var renderPinCloneTemplateElements = function (item) { /* Относится к Рендеру *//* Отрисовщик ( А отрисовщик ли это? больше он похож на сборочную машину формирующую элементы.) данных на карте/может стоит отделить? */
     var pinCloneTemplate = templatePin.cloneNode(true);/* Создаем переменную в которую записываем/копируем/клонируем элемент/переменную/Шаблон(вернее шаблон, просто задан переменной.) template со всем ее содержимым(Т.е. всю ее разметку вместе с детьми/если бы были.(true), если дети узла должны быть клонированы или false для того, чтобы был клонирован только указанный узел.) */
     var pinCloneTemplateImage = pinCloneTemplate.querySelector('img');
 
@@ -30,16 +30,24 @@
   // console.log(window.data.createAllCards());
   // console.log(window.xhr.response);
   var templatePin = document.querySelector('#pin').content.querySelector('.map__pin');/* ДОБАВЛЕНИЕ ЧЕРЕЗ template// Создана переменная template(одноименна с названием элемента template) которая ищет элемент/шаблон template по id, после обращается к свойству данного элемента content(которое является единственным свойством данного элемента и предназначено для взаимодействия с его содержимым.) */
+  var fragment = document.createDocumentFragment();/* Относится к Рендеру */
+  var mapPins = document.querySelector('.map__pins');/* Относится к Рендеру *//* Переменная для нахождения блока с классом map__pins. (в последующем будет использоваться для добавления элементов в разметку посредством documentFragment)Это блок для отрисовки. */
+  var NUMBER_ITEMS_DISPLAY_MAX = 5;
+  var numberItemsDisplay = NUMBER_ITEMS_DISPLAY_MAX;
 
-  var mapPins = document.querySelector('.map__pins');/* Переменная для нахождения блока с классом map__pins. (в последующем будет использоваться для добавления элементов в разметку посредством documentFragment)Это блок для отрисовки. */
-  var fragment = document.createDocumentFragment();
 
-  var addPinAllCards = function (items) { /*  Функция добавления элементов в разметку посредством fragment. */
-    for (var i = 0; i < NUMBER_CARDS_DISPLAY; i++) { /* Цикл который добавляет элементы в разметку. (В виртуальную разметку-не меняет исходный HTML). */
+  var renderPinCards = function (items) { /*  Функция добавления элементов в разметку посредством fragment. */
+    if (items.length < NUMBER_ITEMS_DISPLAY_MAX) { /* Операция в строчку Тернарная ? Разобраться как можно.*/
+      numberItemsDisplay = items.length;
+    }
+
+    for (var i = 0; i < numberItemsDisplay; i++) { /* Добавление в зависимости от количества подходящих вариантов/элементов. Цикл который добавляет элементы в разметку. (В виртуальную разметку-не меняет исходный HTML). */
       fragment.appendChild(renderPinCloneTemplateElements(items[i]));
     }
     mapPins.appendChild(fragment); /* Добавляем элемент|Фрагмент который представляет из себя элемент pin с всей разметкой и указанными нами свойствами в элемент с классом mapPins(внутрь данного элемента/вернее его клона) в конец. Это выполняется для т.н. накопления всех элементов этого блока для их совместной, последующей, единоразовой, последовательной отрисовки посредством использования fragment. */
   };
+
+  // ###########################################################################################
 
   var mapPinMainActions = function () { /* Главная функция активация карты(Нажатием на pin)*/
     adForm.classList.remove('ad-form--disabled');
@@ -51,9 +59,10 @@
 
     /* Отрисовка в активном состоянии */
 
-    var onDataLoad = function (data) {
-      addPinAllCards(data); /* addPinAllCards(saveAllCards);было. Теперь  */
-      // console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
+    var onSuccess = function (data) {
+      // Возможно добавлю копирование первозданного массива данных для возможного сравнения. (В лекции упоминалось.) Для этого data сохраню а в функцию передам копию.
+      window.filter.pins(data); /* renderPinCards(saveAllCards);было. Теперь  */
+      console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
     };
 
     var onError = function () {
@@ -62,7 +71,7 @@
     };
 
 
-    window.backend.load(onDataLoad, onError);
+    window.backend.load(onSuccess, onError);/* Функция load принимает в себя параметры onSuccess, и onError  Это функция действий при загрузке данных с сервера.*/
 
     // Корректировка расположения точки в активном состоянии.
     /* // Координаты центра для иглы метки: map__pin--main */
@@ -89,5 +98,6 @@
   mapPinMain.addEventListener('mousedown', onMainPinMouseOrKeyDown); /* Добавлен слушатель/обработчик на событие mousedown + клик левой клавишей мыши*/
 
   window.pin = {
+    renderPinCards: renderPinCards
   };
 })();

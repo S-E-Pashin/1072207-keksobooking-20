@@ -8,6 +8,7 @@
   var mapPinMain = document.querySelector('.map__pin--main'); /* Главный пин на карте */
   var mapPinMainAddress = document.querySelector('#address'); /* Адрес(Поле) куда передаются данные о нахождении главного пина(Координаты) */
   var MAP_PIN_MAIN_AFTER_TIP = 22; /* Высота ножки/острия для метки(Пина) */
+  var NUMBER_CARDS_DISPLAY = 5;
   // Корректировка расположения точки пина в неактивном состоянии.
   // // Координаты центра метки:
   mapPinMainAddress.value = Math.round(mapPinMain.offsetLeft + mapPinMain.offsetWidth / 2) + ', ' + Math.round(mapPinMain.offsetTop + mapPinMain.offsetHeight / 2);
@@ -34,7 +35,7 @@
   var fragment = document.createDocumentFragment();
 
   var addPinAllCards = function (items) { /*  Функция добавления элементов в разметку посредством fragment. */
-    for (var i = 0; i < items.length; i++) { /* Цикл который добавляет элементы в разметку. (В виртуальную разметку-не меняет исходный HTML). */
+    for (var i = 0; i < NUMBER_CARDS_DISPLAY; i++) { /* Цикл который добавляет элементы в разметку. (В виртуальную разметку-не меняет исходный HTML). */
       fragment.appendChild(renderPinCloneTemplateElements(items[i]));
     }
     mapPins.appendChild(fragment); /* Добавляем элемент|Фрагмент который представляет из себя элемент pin с всей разметкой и указанными нами свойствами в элемент с классом mapPins(внутрь данного элемента/вернее его клона) в конец. Это выполняется для т.н. накопления всех элементов этого блока для их совместной, последующей, единоразовой, последовательной отрисовки посредством использования fragment. */

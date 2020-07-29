@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var selectHousingType = document.getElementById('housing-type');
-  var pins = function (data) { /* Фильтр В нем произойден фильтрация от поля выбора комнаты. В data будут находиться данные с сервера/Данные об объектах для отображения - xhr.response */
+  var pinsFilter = function (data) { /* Фильтр В нем произойден фильтрация от поля выбора комнаты. В data будут находиться данные с сервера/Данные об объектах для отображения - xhr.response */
 
     window.pin.renderPinCards(data);
     selectHousingType.addEventListener('input', function () {
@@ -26,6 +26,6 @@
   };
   // console.log(selectHousingType.value);
   window.filter = {/* Экспорт данных в область общей видимости. */
-    pins: pins
+    pins: pinsFilter
   };
 })();

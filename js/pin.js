@@ -37,6 +37,12 @@
 
 
   var renderPinCards = function (items) { /*  Функция добавления элементов в разметку посредством fragment. */
+    // Удаляю элементы из разметки.
+    var mapPinNoMain = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPinNoMain.forEach(function (oldPin) {
+      oldPin.remove();
+    });
+    // -----------
     if (items.length < NUMBER_ITEMS_DISPLAY_MAX) { /* Операция в строчку Тернарная ? Разобраться как можно.*/
       numberItemsDisplay = items.length;
     }
@@ -62,6 +68,7 @@
     var onSuccess = function (data) {
       // Возможно добавлю копирование первозданного массива данных для возможного сравнения. (В лекции упоминалось.) Для этого data сохраню а в функцию передам копию.
       window.filter.pins(data); /* renderPinCards(saveAllCards);было. Теперь  */
+      console.log('Pin^Данные из onSuccess - data');
       console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
     };
 

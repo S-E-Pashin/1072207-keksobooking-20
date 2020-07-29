@@ -33,27 +33,22 @@
   var fragment = document.createDocumentFragment();/* Относится к Рендеру */
   var mapPins = document.querySelector('.map__pins');/* Относится к Рендеру *//* Переменная для нахождения блока с классом map__pins. (в последующем будет использоваться для добавления элементов в разметку посредством documentFragment)Это блок для отрисовки. */
   var NUMBER_ITEMS_DISPLAY_MAX = 5;
-  var numberItemsDisplay = NUMBER_ITEMS_DISPLAY_MAX;
-
 
   var renderPinCards = function (items) { /*  Функция добавления элементов в разметку посредством fragment. */
-    // Удаляю элементы из разметки.
+
     var mapPinNoMain = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    mapPinNoMain.forEach(function (oldPin) {
+    mapPinNoMain.forEach(function (oldPin) { /* Удаляю элементы из разметки. */
       oldPin.remove();
     });
-    // -----------
-    if (items.length < NUMBER_ITEMS_DISPLAY_MAX) { /* Операция в строчку Тернарная ? Разобраться как можно.*/
-      numberItemsDisplay = items.length;
-    }
+
+    var numberItemsDisplay = items.length < NUMBER_ITEMS_DISPLAY_MAX ? numberItemsDisplay = items.length : numberItemsDisplay = NUMBER_ITEMS_DISPLAY_MAX; /* Количество отображаемых элементов = В зависимость количества отображаемых элементов от разрешенной максимальной длинны и длинны полученного массива. Тернарная операция: Переменная = Условие1 < Условие2 ? true действия/значение если верно : fals действия/ значение если условие неверно. */
 
     for (var i = 0; i < numberItemsDisplay; i++) { /* Добавление в зависимости от количества подходящих вариантов/элементов. Цикл который добавляет элементы в разметку. (В виртуальную разметку-не меняет исходный HTML). */
       fragment.appendChild(renderPinCloneTemplateElements(items[i]));
     }
     mapPins.appendChild(fragment); /* Добавляем элемент|Фрагмент который представляет из себя элемент pin с всей разметкой и указанными нами свойствами в элемент с классом mapPins(внутрь данного элемента/вернее его клона) в конец. Это выполняется для т.н. накопления всех элементов этого блока для их совместной, последующей, единоразовой, последовательной отрисовки посредством использования fragment. */
   };
-
-  // ###########################################################################################
+  // ############# РЕНДЕР-КОНЕЦ --- ВОЗМОЖНО ЭТОТ КОД БУДЕТ ПЕРЕНЕСЕН ##########################
 
   var mapPinMainActions = function () { /* Главная функция активация карты(Нажатием на pin)*/
     adForm.classList.remove('ad-form--disabled');
@@ -68,8 +63,8 @@
     var onSuccess = function (data) {
       // Возможно добавлю копирование первозданного массива данных для возможного сравнения. (В лекции упоминалось.) Для этого data сохраню а в функцию передам копию.
       window.filter.pins(data); /* renderPinCards(saveAllCards);было. Теперь  */
-      console.log('Pin^Данные из onSuccess - data');
-      console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
+      // console.log('Pin^Данные из onSuccess - data');
+      // console.log(data); /* Данные которые были переданы в функцию посредством полученного в файле backend  объекта/ов и переданного посредством функции в параметр которой*/
     };
 
     var onError = function () {
